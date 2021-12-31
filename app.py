@@ -39,12 +39,19 @@ RATE_LIMIT = args.rate_limit
 search_console_url = 'https://search.google.com/u/1/search-console?' + urlencode({'resource_id':PROPERTY})
 date_today = datetime.today().strftime('%Y-%m-%d')
 
+yag = authenticate_yagmail()
+print('Authenticating to Gmail...')
+
 # getting our data from GSC API
+print('Fetching data from GSC API...')
 gsc_data = query(PROPERTY, NUM_URLS)
+print('Done.')
 
 # checking our URLs for 4xx, 5xx errors
+print('Checking URLs for errors & redirects...')
 check_results = return_results_as_dataframe(urls=gsc_data.page.to_list(),
                                             rate_limit=RATE_LIMIT)
+print('Done.')
 
 # joining the check results back on to the original dataframe
 gsc_data = gsc_data.join(check_results, on='page')
@@ -54,18 +61,20 @@ errors = gsc_data[gsc_data.status_code != 200]
 redirects = gsc_data[gsc_data.redirect_type > 300]
 
 # writing the errors to CSVs
+print('Saving results of check to CSV...')
 if not Path('errors').exists():
     Path('errors').mkdir()
     errors.to_csv(path_or_buf='errors/latest-errors.csv',
                                                 index=False)
     redirects.to_csv(path_or_buf='errors/latest-redirects.csv',
                                                 index=False)
-    print('Saved errors to CSVs.')
+
 else:
     errors.to_csv(path_or_buf='errors/latest-errors.csv',
                                                 index=False)
     redirects.to_csv(path_or_buf='errors/latest-redirects.csv',
                                                 index=False)
+print('Done.')
 
 if errors.empty:
     with open('html-templates/no-new-errors.html') as f:
@@ -119,14 +128,11 @@ else:
                                 .replace(r'{{NUM_REDIRECTS_FOUND}}', str(redirects.shape[0]))\
                                 .replace(r'{{CLICK_PERCENTAGE}}', str(percentage_of_clicks_affected_by_redirects))
             attachments.append('errors/latest-errors.csv')
-
-yag = authenticate_yagmail()
-print('Authenticating to Gmail...')
-
+print(f'Sending email(s) to {",".join(RECIPIENTS)}...')
 yag.send(
     subject=subject,
     to=RECIPIENTS,
     attachments=attachments,
     contents=contents,
 )
-print('Sent email to recipients.')
+print('Done.')
