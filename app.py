@@ -1,15 +1,17 @@
 #!/usr/bin/env python3
 import argparse
+import sys
+from datetime import datetime
 from pathlib import Path
+from urllib.parse import urlencode
 
+import pandas as pd
 import searchconsole
 from searchconsole import auth
+
 from auth_utils import authenticate_gsc, authenticate_yagmail
-from query_search_console import query
 from check_urls import return_results_as_dataframe
-import pandas as pd
-from urllib.parse import urlencode
-from datetime import datetime
+from query_search_console import query
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--property',
@@ -49,8 +51,23 @@ print('Done.')
 
 # checking our URLs for 4xx, 5xx errors
 print('Checking URLs for errors & redirects...')
-check_results = return_results_as_dataframe(urls=gsc_data.page.to_list(),
-                                            rate_limit=RATE_LIMIT)
+try:
+    check_results = return_results_as_dataframe(urls=gsc_data.page.to_list(),
+                                                rate_limit=RATE_LIMIT)
+# adding in an  exception block to 
+except Exception as e:
+    yag.send(
+        subject='⚠️ Script crashed - check logs',
+        to = RECIPIENTS,
+        contents = f'''
+        The following error occurred:
+        
+        {str(e)}
+        
+        Check logs for more info.
+        '''
+    )
+    sys.exit()
 print('Done.')
 
 # joining the check results back on to the original dataframe
@@ -75,6 +92,8 @@ else:
     redirects.to_csv(path_or_buf='errors/latest-redirects.csv',
                                                 index=False)
 print('Done.')
+
+# conditional statements below decide which template of email will be sent
 
 if errors.empty:
     with open('html-templates/no-new-errors.html') as f:
@@ -127,8 +146,9 @@ else:
                                 .replace(r'{{END_REDIRECTS_BLOCK}}-->', '')\
                                 .replace(r'{{NUM_REDIRECTS_FOUND}}', str(redirects.shape[0]))\
                                 .replace(r'{{CLICK_PERCENTAGE}}', str(percentage_of_clicks_affected_by_redirects))
-            attachments.append('errors/latest-errors.csv')
+            attachments.append('errors/latest-errors.csv')            
 print(f'Sending email(s) to {",".join(RECIPIENTS)}...')
+
 yag.send(
     subject=subject,
     to=RECIPIENTS,
