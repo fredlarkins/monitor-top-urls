@@ -31,6 +31,17 @@ You'll only be using the account to send emails - so in theory, someone that gai
 - Download the json credentials file into the `monitor-top-urls` folder (or whatever you chose to name it!)
 ---  
 
+## Setting up the virtual environment
+In your terminal, navigate to the directory where the repo is saved and run:
+```
+$ python3 -m venv venv
+$ source venv/bin/activate
+$ pip install -r requirements.txt
+```
+This will install all the necessary packages for the script to run. Make sure you activate the venv each time you want to use the script!
+
+---
+
 ## Usage
 The script (app.py) takes a few command line arguments.
 
@@ -58,3 +69,5 @@ Enter Gmail password >>> my_gmail_password
 ```
 
 The password will be saved securely in the system keyring service and will not be exposed in your code.
+
+You will also be given a Google login URL - follow this from your terminal ang log in to the account associated with Google Search Console. You'll only have to do this the first time.
