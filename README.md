@@ -71,3 +71,17 @@ Enter Gmail password >>> my_gmail_password
 *The password will be saved securely in the system keyring service and will not be exposed in your code.*
 
 You will also be given a Google login URL - follow this from your terminal and log in to the account associated with Google Search Console. You'll only have to do this the first time.
+
+---
+
+## Output - what the emails look like
+**The all-clear**
+[image placeholder]
+
+**Errors**
+[image placeholder]
+
+---
+
+## Known errors
+- You may be asked to enter your Gmail password twice on some Linux distros. As long as you choose to save the password to keyring when prompted, this should be the only time you have to enter it.
