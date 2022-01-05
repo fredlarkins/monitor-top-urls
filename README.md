@@ -68,6 +68,6 @@ Enter Gmail username >>> my_gmail_username
 Enter Gmail password >>> my_gmail_password
 ```
 
-The password will be saved securely in the system keyring service and will not be exposed in your code.
+*The password will be saved securely in the system keyring service and will not be exposed in your code.*
 
-You will also be given a Google login URL - follow this from your terminal ang log in to the account associated with Google Search Console. You'll only have to do this the first time.
+You will also be given a Google login URL - follow this from your terminal and log in to the account associated with Google Search Console. You'll only have to do this the first time.
