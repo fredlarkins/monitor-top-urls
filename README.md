@@ -75,11 +75,13 @@ You will also be given a Google login URL - follow this from your terminal and l
 ---
 
 ## Output - what the emails look like
-**The all-clear**
-[image placeholder]
+**The all-clear**  
+*Screenshot of the email if no errors are detected*
+![](screenshots/all-good.png)
 
-**Errors**
-[image placeholder]
+**Errors**  
+*Screenshot of the email if errors are detected, with a CSV of the errors attached plus a calculation of the % of clicks affected.*
+![](screenshots/errors-detected.png)
 
 ---
 
