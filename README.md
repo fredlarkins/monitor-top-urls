@@ -85,5 +85,5 @@ You will also be given a Google login URL - follow this from your terminal and l
 
 ---
 
-## Known errors
+## Known issues with the script
 - You may be asked to enter your Gmail password twice on some Linux distros. As long as you choose to save the password to keyring when prompted, this should be the only time you have to enter it.
