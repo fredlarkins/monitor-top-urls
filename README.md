@@ -36,7 +36,7 @@ In your terminal, navigate to the directory where the repo is saved and run:
 ```
 $ python3 -m venv venv
 $ source venv/bin/activate
-$ pip install -r requirements.txt
+$ pip3 install -r requirements.txt
 ```
 This will install all the necessary packages for the script to run. Make sure you activate the venv each time you want to use the script!
 
